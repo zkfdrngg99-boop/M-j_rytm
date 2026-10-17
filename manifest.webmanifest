@@ -1,0 +1,13 @@
+{
+  "name": "Mój Rytm",
+  "short_name": "Mój Rytm",
+  "description": "Prywatny dziennik nastroju, energii i cyklu",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f3e9",
+  "theme_color": "#e8eee5",
+  "icons": [
+    {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}
+  ]
+}

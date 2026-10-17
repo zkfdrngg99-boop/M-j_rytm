@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#e8eee5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mój Rytm">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Mój Rytm</title>
+<style>
+:root{--sage:#73866e;--sage-dark:#435744;--sage-pale:#e8eee5;--cream:#f7f3e9;--paper:#fffdf8;--ink:#2e382f;--muted:#6f786d;--line:#dce2d6;--clay:#c58e72}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.4}
+header{padding:24px 18px 16px;background:linear-gradient(135deg,#e8eee5,#f7f3e9);border-bottom:1px solid var(--line)}
+.brand{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--sage-dark);font-weight:700}
+h1{font-size:30px;margin:5px 0 4px;letter-spacing:-.04em}header p{margin:0;color:var(--muted);font-size:14px}
+main{max-width:760px;margin:auto;padding:16px 14px 36px}
+.tabs{display:flex;gap:7px;overflow:auto;padding:4px 0 14px}
+.tab{border:1px solid var(--line);border-radius:99px;padding:10px 14px;background:var(--paper);white-space:nowrap;color:var(--sage-dark);font-weight:600}
+.tab.active{background:var(--sage-dark);color:white;border-color:var(--sage-dark)}
+.panel{display:none}.panel.active{display:block}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:17px;margin-bottom:13px;box-shadow:0 4px 18px #46533a08}
+.card h2{font-size:18px;margin:0 0 5px}.sub{font-size:13px;color:var(--muted);margin:0 0 14px}
+label{display:block;font-size:14px;font-weight:650;margin:14px 0 7px}
+input,select,textarea{font:inherit;width:100%;padding:12px;border:1px solid #cfd8ca;border-radius:12px;background:#fffefb;color:var(--ink)}
+textarea{min-height:76px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.scale{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.scale button{border:1px solid var(--line);border-radius:12px;padding:10px 2px;background:#fffefb;color:var(--ink);font-size:15px}
+.scale button span{display:block;font-size:10px;color:var(--muted);margin-top:3px}
+.scale button.chosen{background:var(--sage-pale);border:2px solid var(--sage);padding:9px 1px;color:var(--sage-dark);font-weight:800}
+.btn{border:0;border-radius:13px;padding:13px 16px;background:var(--sage-dark);color:white;font-weight:750;font-size:15px;width:100%;margin-top:14px}
+.btn.secondary{background:var(--sage-pale);color:var(--sage-dark);border:1px solid var(--line)}
+.btn.danger{background:#f7e9e3;color:#854b36}
+.pill{display:inline-block;background:var(--sage-pale);color:var(--sage-dark);border-radius:99px;padding:6px 10px;font-size:12px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stat{background:var(--sage-pale);border-radius:14px;padding:12px}.stat b{font-size:22px;display:block}.stat small{color:var(--muted)}
+.entry{padding:13px 0;border-bottom:1px solid var(--line)}.entry:last-child{border:0}.entrytop{display:flex;justify-content:space-between;gap:12px;align-items:start}.entry strong{font-size:14px}.entry p{margin:5px 0;color:var(--muted);font-size:13px}
+.barrow{display:grid;grid-template-columns:92px 1fr 25px;align-items:center;gap:8px;margin:12px 0;font-size:13px}.barbg{height:10px;background:#edf0e9;border-radius:99px;overflow:hidden}.bar{height:100%;background:var(--sage);border-radius:99px}
+.notice{font-size:12px;color:var(--muted);padding:4px 2px 12px}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:8px 20px 24px}
+@media(min-width:650px){header{padding-left:max(22px,calc((100vw - 720px)/2));padding-right:max(22px,calc((100vw - 720px)/2))}.row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header><div class="brand">Twój prywatny dziennik</div><h1>Mój Rytm <span aria-hidden="true">✿</span></h1><p>Obserwuj siebie łagodnie, dzień po dniu.</p></header>
+<main>
+<nav class="tabs" aria-label="Sekcje">
+<button class="tab active" data-tab="today">Dzisiaj</button><button class="tab" data-tab="history">Historia</button><button class="tab" data-tab="trends">Wykresy</button><button class="tab" data-tab="settings">Ustawienia i dane</button>
+</nav>
+<section id="today" class="panel active">
+<div class="card"><h2>Dzisiejszy wpis</h2><p class="sub">Wystarczy chwila. Nie ma dobrych ani złych wyników.</p>
+<label for="entryDate">Data</label><input type="date" id="entryDate">
+<div class="row"><div><label for="periodStart">Pierwszy dzień ostatniej miesiączki</label><input type="date" id="periodStart"></div><div><label for="cycleLength">Typowa długość cyklu (dni)</label><input type="number" id="cycleLength" min="15" max="60" value="28"></div></div>
+<div id="cycleInfo" class="pill" style="margin-top:10px">Dzień cyklu: —</div>
+<div id="ratings"></div>
+<div class="row"><div><label for="sleep">Sen (godziny)</label><input id="sleep" type="number" min="0" max="24" step=".5" placeholder="np. 7.5"></div><div><label for="activity">Aktywność</label><select id="activity"><option value="">Wybierz…</option><option>Brak</option><option>Spacer</option><option>Rozciąganie / joga</option><option>Trening siłowy</option><option>Squash</option><option>Zdrowy kręgosłup</option><option>Inna aktywność</option></select></div></div>
+<label for="symptoms">Objawy (opcjonalnie)</label><input id="symptoms" placeholder="np. ból głowy, skurcze, tkliwość">
+<label for="notes">Notatka dla siebie</label><textarea id="notes" placeholder="Co mogło wpłynąć na mój dzień?"></textarea>
+<button class="btn" id="save">Zapisz wpis na tym urządzeniu</button><div id="saveMsg" class="notice" role="status"></div>
+</div>
+<div class="notice">Prywatność: ten prototyp zapisuje wpisy w pamięci lokalnej przeglądarki. Nie wysyła ich na serwer. Nie czyść danych witryny bez wcześniejszego eksportu kopii.</div>
+</section>
+<section id="history" class="panel"><div class="card"><h2>Historia wpisów</h2><p class="sub">Najnowsze wpisy pojawiają się na górze.</p><div id="historyList"></div></div></section>
+<section id="trends" class="panel"><div class="card"><h2>Twoje trendy</h2><p class="sub">Średnie z zapisanych wpisów. Więcej danych pozwoli lepiej zauważyć wzorce.</p><div id="trendSummary"></div></div><div class="card"><h2>Wyniki według dnia cyklu</h2><p class="sub">Średnie dla poszczególnych dni cyklu, jeśli wpisy zawierają datę początku miesiączki.</p><div id="cycleTrends"></div></div></section>
+<section id="settings" class="panel">
+<div class="card"><h2>Kopia zapasowa i eksport</h2><p class="sub">Eksportuj regularnie, aby zachować historię. Plik kopii zawiera wszystkie wpisy i ustawienia cyklu.</p>
+<button class="btn" id="backup">Pobierz kopię zapasową (JSON)</button><button class="btn secondary" id="csv">Eksportuj wpisy do CSV</button>
+<label for="restoreFile">Przywróć kopię JSON</label><input type="file" id="restoreFile" accept=".json,application/json"><button class="btn secondary" id="restore">Importuj kopię</button><p class="notice" id="dataMsg"></p></div>
+<div class="card"><h2>Ustawienia prywatności</h2><p class="sub">Dane są przechowywane w lokalnej pamięci tej przeglądarki. Nie ma konta, synchronizacji ani wysyłania wpisów.</p><button class="btn danger" id="deleteAll">Usuń wszystkie wpisy z tego urządzenia</button><p class="notice">Ta czynność jest nieodwracalna, jeśli nie masz kopii zapasowej.</p></div>
+</section>
+</main>
+<footer>Mój Rytm · prototyp lokalny · wyniki opisują obserwacje, nie diagnozę medyczną.</footer>
+<script>
+const KEY='mojRytm.entries.v1', SETTINGS='mojRytm.settings.v1';
+const fields=[['mood','Nastrój'],['energy','Energia'],['motivation','Motywacja'],['focus','Koncentracja'],['stress','Stres']];
+const descriptions={mood:['Bardzo niski','Niski','Średni','Dobry','Bardzo dobry'],energy:['Bardzo niska','Niska','Średnia','Wysoka','Bardzo wysoka'],motivation:['Brak','Niska','Średnia','Wysoka','Bardzo wysoka'],focus:['Bardzo słaba','Słaba','Średnia','Dobra','Bardzo dobra'],stress:['Bardzo niski','Niski','Średni','Wysoki','Bardzo wysoki']};
+let selected={mood:3,energy:3,motivation:3,focus:3,stress:3};
+const $=id=>document.getElementById(id);
+function today(){let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function loadEntries(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return []}}
+function saveEntries(a){localStorage.setItem(KEY,JSON.stringify(a))}
+function loadSettings(){try{return JSON.parse(localStorage.getItem(SETTINGS)||'{}')}catch(e){return {}}}
+function cycleDay(date,start){if(!date||!start)return null;let d=new Date(date+'T12:00:00'),s=new Date(start+'T12:00:00');let n=Math.floor((d-s)/86400000);if(n<0)return null;return n%Number($('cycleLength').value||28)+1}
+function drawRatings(){ $('ratings').innerHTML=fields.map(([key,name])=>`<div><label>${name} · skala 1–5</label><div class="scale" data-scale="${key}">${[1,2,3,4,5].map(n=>`<button type="button" data-value="${n}" class="${selected[key]===n?'chosen':''}">${n}<span>${descriptions[key][n-1]}</span></button>`).join('')}</div></div>`).join('');document.querySelectorAll('.scale button').forEach(b=>b.onclick=()=>{let k=b.closest('.scale').dataset.scale;selected[k]=Number(b.dataset.value);drawRatings()})}
+function updateCycle(){let n=cycleDay($('entryDate').value,$('periodStart').value);$('cycleInfo').textContent=n?`Dzień cyklu: ${n}`:'Ustaw datę początku miesiączki, aby wyliczyć dzień cyklu'}
+function init(){let s=loadSettings();$('entryDate').value=today();$('periodStart').value=s.periodStart||'';$('cycleLength').value=s.cycleLength||28;drawRatings();updateCycle();$('entryDate').onchange=()=>{loadForDate();updateCycle()};$('periodStart').onchange=()=>{localStorage.setItem(SETTINGS,JSON.stringify({periodStart:$('periodStart').value,cycleLength:$('cycleLength').value}));updateCycle()};$('cycleLength').onchange=()=>{localStorage.setItem(SETTINGS,JSON.stringify({periodStart:$('periodStart').value,cycleLength:$('cycleLength').value}));updateCycle()};loadForDate();renderAll()}
+function loadForDate(){let e=loadEntries().find(x=>x.date===$('entryDate').value);selected={mood:3,energy:3,motivation:3,focus:3,stress:3};['sleep','activity','symptoms','notes'].forEach(k=>$(k).value=e?.[k]??'');fields.forEach(([k])=>{if(e?.[k])selected[k]=e[k]});drawRatings();updateCycle()}
+$('save').onclick=()=>{let date=$('entryDate').value;if(!date){$('saveMsg').textContent='Wybierz datę.';return}let entries=loadEntries().filter(e=>e.date!==date);let e={date,periodStart:$('periodStart').value,cycleLength:Number($('cycleLength').value||28),cycleDay:cycleDay(date,$('periodStart').value),...selected,sleep:$('sleep').value,activity:$('activity').value,symptoms:$('symptoms').value.trim(),notes:$('notes').value.trim(),updatedAt:new Date().toISOString()};entries.push(e);entries.sort((a,b)=>a.date.localeCompare(b.date));saveEntries(entries);localStorage.setItem(SETTINGS,JSON.stringify({periodStart:$('periodStart').value,cycleLength:$('cycleLength').value}));$('saveMsg').textContent='Wpis zapisany na tym urządzeniu.';renderAll()};
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab));renderAll()});
+function fmtDate(s){return new Date(s+'T12:00:00').toLocaleDateString('pl-PL',{day:'numeric',month:'short',year:'numeric'})}
+function renderHistory(){let es=loadEntries().slice().sort((a,b)=>b.date.localeCompare(a.date));$('historyList').innerHTML=es.length?es.map(e=>`<div class="entry"><div class="entrytop"><strong>${fmtDate(e.date)}</strong><span class="pill">${e.cycleDay?'Dzień cyklu '+e.cycleDay:'Bez danych cyklu'}</span></div><p>Nastrój ${e.mood}/5 · energia ${e.energy}/5 · motywacja ${e.motivation}/5 · koncentracja ${e.focus}/5 · stres ${e.stress}/5</p><p>${e.activity?`Aktywność: ${esc(e.activity)} · `:''}${e.sleep?`Sen: ${esc(e.sleep)} h`:''}</p>${e.symptoms?`<p>Objawy: ${esc(e.symptoms)}</p>`:''}${e.notes?`<p>${esc(e.notes)}</p>`:''}<button class="btn secondary" data-edit="${e.date}">Otwórz wpis</button></div>`).join(''):'<p class="sub">Nie ma jeszcze zapisanych wpisów. Dodaj pierwszy w zakładce „Dzisiaj”.</p>';document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{ $('entryDate').value=b.dataset.edit;loadForDate();document.querySelector('[data-tab="today"]').click();window.scrollTo(0,0)})}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderTrends(){let es=loadEntries();let keys=[...fields,['sleep','Sen (godz.)']];$('trendSummary').innerHTML=es.length?keys.map(([k,n])=>{let vals=es.map(e=>Number(e[k])).filter(v=>Number.isFinite(v)&&v>0);if(!vals.length)return '';let avg=vals.reduce((a,b)=>a+b,0)/vals.length;let max=k==='sleep'?10:5;return `<div class="barrow"><span>${n}</span><div class="barbg"><div class="bar" style="width:${Math.min(100,avg/max*100)}%"></div></div><b>${avg.toFixed(1)}</b></div>`}).join(''):`<p class="sub">Wykresy pojawią się po zapisaniu wpisów.</p>`;
+let cyc={};es.filter(e=>e.cycleDay).forEach(e=>{let n=e.cycleDay;cyc[n]??={n:0,mood:0,energy:0,motivation:0,focus:0,stress:0};cyc[n].n++;['mood','energy','motivation','focus','stress'].forEach(k=>cyc[n][k]+=Number(e[k]||0))});let days=Object.keys(cyc).map(Number).sort((a,b)=>a-b);$('cycleTrends').innerHTML=days.length?days.map(d=>{let x=cyc[d];return `<div class="entry"><strong>Dzień cyklu ${d}</strong><p>${['mood','energy','motivation','focus','stress'].map(k=>({mood:'nastrój',energy:'energia',motivation:'motywacja',focus:'koncentracja',stress:'stres'}[k])+' '+(x[k]/x.n).toFixed(1)).join(' · ')}</p><p>${x.n} ${x.n===1?'wpis':x.n<5?'wpisy':'wpisów'}</p></div>`}).join(''):'<p class="sub">Dodaj datę początku miesiączki i zapisuj wpisy, aby porównywać dni cyklu.</p>'}
+function renderAll(){renderHistory();renderTrends()}
+$('backup').onclick=()=>download('moj-rytm-kopia-'+today()+'.json',JSON.stringify({format:'moj-rytm-backup-v1',exportedAt:new Date().toISOString(),settings:loadSettings(),entries:loadEntries()},null,2),'application/json');
+$('csv').onclick=()=>{let es=loadEntries();let cols=['date','periodStart','cycleLength','cycleDay','mood','energy','motivation','focus','stress','sleep','activity','symptoms','notes'];let csv=[cols.join(';'),...es.map(e=>cols.map(k=>`"${String(e[k]??'').replace(/"/g,'""')}"`).join(';'))].join('\r\n');download('moj-rytm-wpisy-'+today()+'.csv','\ufeff'+csv,'text/csv;charset=utf-8')};
+function download(name,data,type){let blob=new Blob([data],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500)}
+$('restore').onclick=async()=>{let f=$('restoreFile').files[0];if(!f){$('dataMsg').textContent='Najpierw wybierz plik kopii JSON.';return}try{let d=JSON.parse(await f.text());if(d.format!=='moj-rytm-backup-v1'||!Array.isArray(d.entries))throw Error();if(!confirm('Import zastąpi obecną historię wpisów. Kontynuować?'))return;saveEntries(d.entries);localStorage.setItem(SETTINGS,JSON.stringify(d.settings||{}));$('dataMsg').textContent='Kopia przywrócona.';init()}catch(e){$('dataMsg').textContent='Nie udało się odczytać kopii. Wybierz plik JSON wyeksportowany z Mój Rytm.'}};
+$('deleteAll').onclick=()=>{if(confirm('Usunąć wszystkie wpisy i ustawienia z tej przeglądarki? Najpierw pobierz kopię, jeśli chcesz zachować dane.')){localStorage.removeItem(KEY);localStorage.removeItem(SETTINGS);$('dataMsg').textContent='Usunięto lokalne wpisy.';init()}};
+init();
+</script>
+<script>if ("serviceWorker" in navigator && location.protocol.startsWith("http")) { window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {})); }</script>
+</body></html>
